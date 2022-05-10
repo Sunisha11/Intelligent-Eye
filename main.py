@@ -53,14 +53,14 @@ while True:
             print(text)
             listening = False
             engine.text_speech(text)
-        elif intent == 'Brightness':
-            engine.text_speech("It is {} outside".format(
-                (functions.getBrightness(cam))[0]))
-        elif intent == "FillForm":
-            detect.detect_form(cam, engine)
-        elif intent == "Read":
-            print("read")
-            detect.detect_text(cam, engine)
+#         elif intent == 'Brightness':
+#             engine.text_speech("It is {} outside".format(
+#                 (functions.getBrightness(cam))[0]))
+#         elif intent == "FillForm":
+#             detect.detect_form(cam, engine)
+#         elif intent == "Read":
+#             print("read")
+#             detect.detect_text(cam, engine)
         elif intent == "Time":
             currentDT = datetime.datetime.now()
             engine.text_speech("The time is {} hours and {} minutes".format(
