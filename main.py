@@ -2,6 +2,7 @@ import modules.speech as speech
 import cv2
 import os
 import datetime
+
 import modules.detect as detect
 
 # setting up dialogflow credentials
@@ -18,8 +19,10 @@ DIALOGFLOW_LANGUAGE_CODE = "en"
 # # create an object of model used for object detection
 # model = yolopy.yolo(labelsPath, weightsPath, configPath)
 
+
 # create an object from speech module
 engine = speech.speech_to_text()
+
 
 listening = False
 intent = None
