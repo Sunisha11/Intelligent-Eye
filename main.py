@@ -12,6 +12,7 @@ DIALOGFLOW_LANGUAGE_CODE = "en"
 # create an object from speech module
 engine = speech.speech_to_text()
 
+
 listening = False
 intent = None
 
@@ -43,11 +44,7 @@ while True:
             print(text)
             listening = False
             engine.text_speech(text)
-        elif intent == "FillForm":
-            detect.detect_form(cam, engine)
-        elif intent == "Read":
-            print("read")
-            detect.detect_text(cam, engine)
+
         elif intent == "Time":
             currentDT = datetime.datetime.now()
             engine.text_speech("The time is {} hours and {} minutes".format(
