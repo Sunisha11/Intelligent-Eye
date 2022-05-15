@@ -41,6 +41,9 @@ while True:
             detect.describeScene(cam, engine)
         elif intent == 'Brightness':
             engine.text_speech("It is {} outside".format((functions.getBrightness(cam))[0]))
+        elif intent == "Time":
+            currentDT = datetime.datetime.now()
+            engine.text_speech("The time is {} hours and {} minutes".format(currentDT.hour, currentDT.minute))
         elif intent == 'endconvo':
             print(text)
             listening = False
