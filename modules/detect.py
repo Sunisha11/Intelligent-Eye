@@ -44,11 +44,11 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
 def describeScene(cam, engine):
     print(__file__)
     ret, frame = cam.read()
-    cv2.imwrite('../op.jpg', frame)
+    cv2.imwrite('op.jpg', frame)
     credentials = service_account.Credentials.from_service_account_file(
         "united-monument-350013-0e8fdf2efe4a.json")
     client = vision.ImageAnnotatorClient(credentials=credentials)
-    path = '../op.jpg'
+    path = 'op.jpg'
     # path = 'images/road2.jpg'
     with io.open(path, 'rb') as image_file:
         content = image_file.read()
@@ -58,45 +58,7 @@ def describeScene(cam, engine):
 
     engine.text_speech("Description of the view")
 
-    checkRoad(labels, engine)
     tellObjects(client, image, engine)
-
-
-def checkRoad(labels, engine):
-    road = 0
-    car = 0
-    motor_vehicle = 0
-    bicycle = 0
-    classroom = 0
-    truck = 0
-    traffic = 0
-    face = 0
-    for i, label in enumerate(labels):
-        if (label.description == "Highway" or label.description == "Lane" or label.description == "Road"):
-            road += 1
-        if (label.description == "Car"):
-            car += 1
-        if (label.description == "Motor vehicle"):
-            motor_vehicle += 1
-        if (label.description == "Bicycle"):
-            bicycle += 1
-        if (label.description == "Truck"):
-            truck += 1
-        if (label.description == "Face"):
-            face += 1
-        if (label.description == "Classroom"):
-            classroom += 1
-        if (label.description == "Traffic"):
-            traffic += 1
-    if (1):
-        if (car >= 1 or motor_vehicle >= 1 or bicycle >= 1 or truck >= 1 or traffic >= 1):
-            engine.text_speech(
-                "It seems you are walking on a road with vehicles. Beware! Do you want me to find people for help?")
-        else:
-            engine.text_speech(
-                "It seems the road you are walking on is quite safe. Yet beware.")
-    if (classroom >= 1):
-        engine.text_speech("You seem to be in a classroom!")
 
 
 def tellObjects(client, image,  engine):
@@ -129,10 +91,3 @@ def tellObjects(client, image,  engine):
     if (length == 0):
         engine.text_speech("No objects found")
 
-
-# # create an object from speech module
-# engine = speech.speech_to_text()
-# cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-#
-# describeScene(cam, engine=engine)
-# cam.release()
