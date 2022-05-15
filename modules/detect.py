@@ -45,8 +45,7 @@ def describeScene(cam, engine):
     print(__file__)
     ret, frame = cam.read()
     cv2.imwrite('op.jpg', frame)
-    credentials = service_account.Credentials.from_service_account_file(
-        "united-monument-350013-0e8fdf2efe4a.json")
+    credentials = service_account.Credentials.from_service_account_file("united-monument-350013-0e8fdf2efe4a.json")
     client = vision.ImageAnnotatorClient(credentials=credentials)
     path = 'op.jpg'
     # path = 'images/road2.jpg'
@@ -62,11 +61,9 @@ def describeScene(cam, engine):
 
 
 def tellObjects(client, image,  engine):
-    objects = client.object_localization(
-        image=image).localized_object_annotations
+    objects = client.object_localization(image=image).localized_object_annotations
     engine.text_speech("I will tell you the objects near you")
     for object_ in objects:
-        # print('{} '.format(object_.name))
         engine.text_speech(object_.name)
     lbldict = {}
     for i in objects:
@@ -90,4 +87,23 @@ def tellObjects(client, image,  engine):
             engine.text_speech("and")
     if (length == 0):
         engine.text_speech("No objects found")
+
+def detect_text(cam, engine):
+    credentials = service_account.Credentials.from_service_account_file("united-monument-350013-0e8fdf2efe4a.json")
+    client = vision.ImageAnnotatorClient(credentials=credentials)
+    ret, content = cam.read()
+    cv2.imwrite('op.jpg', content)
+    with io.open('op.jpg', 'rb') as image_file:
+        content = image_file.read()
+    image = vision.types.Image(content=content)
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+    print(len(texts))
+    print('Text:')
+    textm = ""
+    for i, text in enumerate(texts):
+        engine.text_speech(text.description)
+        textm += text.description
+        textm = textm + " "
+    print(textm)
 

@@ -18,7 +18,7 @@ intent = None
 
 while True:
     cam = cv2.VideoCapture(0)
-  
+    
     if not listening:
         resp = engine.recognize_speech_from_mic()
         print(resp)
@@ -44,11 +44,14 @@ while True:
         elif intent == "Time":
             currentDT = datetime.datetime.now()
             engine.text_speech("The time is {} hours and {} minutes".format(currentDT.hour, currentDT.minute))
+        elif intent == "Read":
+            print("read")
+            detect.detect_text(cam, engine)
         elif intent == 'endconvo':
             print(text)
             listening = False
             engine.text_speech(text)
         elif resp != 'None':
             engine.text_speech(text)
-
+  
     cam.release()
