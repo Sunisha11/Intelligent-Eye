@@ -1,11 +1,12 @@
 import io
+from threading import local
 import cv2
 from google.oauth2 import service_account
 import google.cloud.vision_v1 as vision
 from google.cloud.vision_v1 import types
 import google.cloud.dialogflow_v2 as dialogflow
 from google.api_core.exceptions import InvalidArgument
-# import speech
+from iso639 import languages
 
 
 def detect_intent_texts(project_id, session_id, texts, language_code):
@@ -45,7 +46,8 @@ def describeScene(cam, engine):
     print(__file__)
     ret, frame = cam.read()
     cv2.imwrite('op.jpg', frame)
-    credentials = service_account.Credentials.from_service_account_file("united-monument-350013-0e8fdf2efe4a.json")
+    credentials = service_account.Credentials.from_service_account_file(
+        "united-monument-350013-0e8fdf2efe4a.json")
     client = vision.ImageAnnotatorClient(credentials=credentials)
     path = 'op.jpg'
     # path = 'images/road2.jpg'
@@ -61,7 +63,8 @@ def describeScene(cam, engine):
 
 
 def tellObjects(client, image,  engine):
-    objects = client.object_localization(image=image).localized_object_annotations
+    objects = client.object_localization(
+        image=image).localized_object_annotations
     engine.text_speech("I will tell you the objects near you")
     for object_ in objects:
         engine.text_speech(object_.name)
@@ -88,22 +91,27 @@ def tellObjects(client, image,  engine):
     if (length == 0):
         engine.text_speech("No objects found")
 
+
 def detect_text(cam, engine):
-    credentials = service_account.Credentials.from_service_account_file("united-monument-350013-0e8fdf2efe4a.json")
+    credentials = service_account.Credentials.from_service_account_file(
+        "united-monument-350013-0e8fdf2efe4a.json")
     client = vision.ImageAnnotatorClient(credentials=credentials)
     ret, content = cam.read()
     cv2.imwrite('op.jpg', content)
-    with io.open('op.jpg', 'rb') as image_file:
+    path = 'op.jpg'
+    # path = 'images/quote-hindi.jpg'
+    with io.open(path, 'rb') as image_file:
         content = image_file.read()
     image = vision.types.Image(content=content)
     response = client.text_detection(image=image)
-    texts = response.text_annotations
-    print(len(texts))
-    print('Text:')
-    textm = ""
-    for i, text in enumerate(texts):
-        engine.text_speech(text.description)
-        textm += text.description
-        textm = textm + " "
-    print(textm)
-
+    locale = response.text_annotations[0].locale
+    lang = languages.get(alpha2=locale).name
+    text = response.text_annotations[0].description
+    print("text:", text)
+    if locale == 'en':
+        engine.text_speech(
+            f'The text is written in {lang} and it goes like this...')
+        engine.text_speech(text)
+    else:
+        engine.text_speech(
+            f'Sorry, currently I am not trained enough to read text written in {lang}. Why not try reading something in English?')
