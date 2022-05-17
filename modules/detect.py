@@ -99,7 +99,6 @@ def detect_text(cam, engine):
     ret, content = cam.read()
     cv2.imwrite('op.jpg', content)
     path = 'op.jpg'
-    # path = 'images/quote-hindi.jpg'
     with io.open(path, 'rb') as image_file:
         content = image_file.read()
     image = vision.types.Image(content=content)
@@ -114,4 +113,27 @@ def detect_text(cam, engine):
         engine.text_speech(text)
     else:
         engine.text_speech(
-            f'Sorry, currently I am not trained enough to read text written in {lang}. Why not try reading something in English?')
+            f'Sorry, currently I am not trained enough to read text written in {lang}. Why not try reading something in English, Hindi or Tamil?')
+
+
+def detect_form(engine):
+
+    credentials = service_account.Credentials.from_service_account_file(
+        "united-monument-350013-0e8fdf2efe4a.json")
+    client = vision.ImageAnnotatorClient(credentials=credentials)
+    path = 'images/bank.jpg'
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
+    image = vision.types.Image(content=content)
+    response = client.text_detection(image=image)
+    locale = response.text_annotations[0].locale
+    lang = languages.get(alpha2=locale).name
+    text = response.text_annotations[0].description
+    print("text:", text)
+    if locale == 'en':
+        engine.text_speech(
+            f'The text is written in {lang} and it goes like this...')
+        engine.text_speech(text)
+    else:
+        engine.text_speech(
+            f'Sorry, currently I am not trained enough to read text written in {lang}. Why not try reading something in English, Hindi or Tamil?')
