@@ -7,3 +7,4 @@ google-cloud-speech
 wave
 google-cloud-vision
 google-cloud-dialogflow
+iso-639
