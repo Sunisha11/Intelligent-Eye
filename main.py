@@ -24,6 +24,8 @@ intent = None
 while True:
     cam = cv2.VideoCapture(0)
     
+    cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
     if not listening:
         resp = engine.recognize_speech_from_mic()
         print(resp)
@@ -75,6 +77,17 @@ while True:
 
         elif intent == 'endconvo':
             listening = False
+            engine.text_speech(text)
+            detect.detect_text(cam, engine)
+
+        elif intent == "fillform":
+            detect.detect_form(engine)
+
+        elif intent == 'endconvo':
+            listening = False
+            engine.text_speech(text)
+
+        elif resp != None:
             engine.text_speech(text)
 
         elif resp != None:
