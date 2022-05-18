@@ -71,14 +71,9 @@ while True:
             engine.text_speech("Details of the form")
             detect.detect_form(engine)
 
-        elif intent == 'play audio':
+        elif intent == 'playaudio':
             engine.text_speech("Playing requested audio")
             functions.play_file('audio_files/penguinmusic.mp3')
-
-        elif intent == 'endconvo':
-            listening = False
-            engine.text_speech(text)
-            detect.detect_text(cam, engine)
 
         elif intent == "fillform":
             detect.detect_form(engine)
