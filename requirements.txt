@@ -8,3 +8,4 @@ wave
 google-cloud-vision
 google-cloud-dialogflow
 iso-639
+mpg123
