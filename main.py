@@ -39,23 +39,33 @@ while True:
             print(resp)
             intent, text = detect.detect_intent_texts(
                 DIALOGFLOW_PROJECT_ID, 0, [resp], DIALOGFLOW_LANGUAGE_CODE)
+
             intent = intent.lower()
 
         print("intent:", intent, "bot resp:", text)
+        
         if intent == 'describe':
             detect.describeScene(cam, engine)
+            
         elif intent == 'brightness':
             engine.text_speech("It is {} outside".format(
                 (functions.getBrightness(cam))[0]))
+            
         elif intent == "time":
             currentDT = datetime.datetime.now()
             engine.text_speech("The time is {} hours and {} minutes".format(
                 currentDT.hour, currentDT.minute))
+            
         elif intent == "read":
             detect.detect_text(cam, engine)
+            
+        elif intent == "fillform:
+            detect.detect_form(engine)
+          
         elif intent == 'endconvo':
             listening = False
             engine.text_speech(text)
+            
         elif resp != None:
             engine.text_speech(text)
 
