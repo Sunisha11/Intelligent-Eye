@@ -4,6 +4,11 @@ import datetime
 import functions
 import modules.speech as speech
 import modules.detect as detect
+import os
+
+# import required modules
+from pydub import AudioSegment
+from pydub.playback import play
 
 # setting up dialogflow credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "drishti-srck-a65fae3e7146.json"
@@ -18,7 +23,7 @@ intent = None
 
 while True:
     cam = cv2.VideoCapture(0)
-
+    
     if not listening:
         resp = engine.recognize_speech_from_mic()
         print(resp)
@@ -33,29 +38,45 @@ while True:
         intent = ''
         engine.text_speech("Listening")
         resp = engine.recognize_speech_from_mic()
+
         engine.text_speech("Processing")
         if(resp != None):
             print(resp)
             intent, text = detect.detect_intent_texts(
                 DIALOGFLOW_PROJECT_ID, 0, [resp], DIALOGFLOW_LANGUAGE_CODE)
-        if intent == 'Describe':
+
+            intent = intent.lower()
+
+        print("intent:", intent, "bot resp:", text)
+
+        if intent == 'describe':
             detect.describeScene(cam, engine)
-        elif intent == 'Brightness':
+
+        elif intent == 'brightness':
             engine.text_speech("It is {} outside".format(
                 (functions.getBrightness(cam))[0]))
-        elif intent == "Time":
+
+        elif intent == "time":
             currentDT = datetime.datetime.now()
             engine.text_speech("The time is {} hours and {} minutes".format(
                 currentDT.hour, currentDT.minute))
-        elif intent == "Read":
+
+        elif intent == "read":
+            engine.text_speech("Reading the intended text")
             detect.detect_text(cam, engine)
-        elif intent == "FillForm":
+
+        elif intent == "fillform":
+            engine.text_speech("Details of the form")
             detect.detect_form(engine)
+
+        elif intent == 'play audio':
+            engine.text_speech("Playing requested audio")
+            functions.play_file('audio_files/penguinmusic.mp3')
+
         elif intent == 'endconvo':
-            print(text)
             listening = False
             engine.text_speech(text)
-        elif resp != 'None':
-            engine.text_speech(text)
 
+        elif resp != None:
+            engine.text_speech(text)
     cam.release()

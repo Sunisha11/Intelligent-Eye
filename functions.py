@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 def getBrightness(cam):
     ret, frame = cam.read()
@@ -14,3 +15,6 @@ def getBrightness(cam):
         return ("Dim", avg)
     else:
         return ("Dark",avg)
+
+def play_file(fname):
+    return os.system("mpg123 " + fname)
