@@ -58,7 +58,7 @@ cd Intelligent_Eye
 py main.py
 ```
 
-## The workflow of the code
+## Workflow of the code
 1. You need to activate our helping bot Drishti by calling her (just like Google Assistant). Console will print start for the first time, then you need to call Drishti by speaking phrases like 'Hello Drishti', 'Good morning Drishti', 'Help me Drishti', etc.
 2. Drishti will get activated and now you can start with your queries like asking for decribing the road, reading the book or filling the form or time and many other things.
 3. You can end the conversation by saying something like 'end the conversation' or 'Stop Drishti'. 
