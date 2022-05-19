@@ -4,11 +4,7 @@ import datetime
 import functions
 import modules.speech as speech
 import modules.detect as detect
-import os
 
-# import required modules
-from pydub import AudioSegment
-from pydub.playback import play
 
 # setting up dialogflow credentials
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "drishti-srck-a65fae3e7146.json"
@@ -17,14 +13,11 @@ DIALOGFLOW_LANGUAGE_CODE = "en"
 
 # create an object from speech module
 engine = speech.speech_to_text()
-
 listening = False
 intent = None
 
 while True:
     cam = cv2.VideoCapture(0)
-    
-    cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
     if not listening:
         resp = engine.recognize_speech_from_mic()
