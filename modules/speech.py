@@ -1,14 +1,8 @@
 import speech_recognition as sr
 import pyttsx3
-from google.oauth2 import service_account
-
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
-import re
-import nltk
 from nltk.corpus import stopwords
-
-from nltk.tokenize import RegexpTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
 
 
@@ -19,14 +13,9 @@ class speech_to_text():
 
         # initialize object for text to speech (pyttsx3)
         self.engine = pyttsx3.init()
-        voices = self.engine.getProperty('voices')
-        for voice in voices:
-            print(f"Voice: {voice.name}")
         self.engine.setProperty('rate', 120)
         voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
-
         self.engine.setProperty('voice', voice_id)
-    #    self.credentials = service_account.Credentials.from_service_account_file('api-key.json')
 
     def recognize_speech_from_mic(self):
         print("Start...")
